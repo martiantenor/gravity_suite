@@ -1,7 +1,7 @@
 # README FILE FOR GRAVITY MODELING PROGRAM SUITE
 
 ## Contact information
-Please contact [Dave Blair](mailto:dblair@purdue.edu) with questions.
+Please contact [Dave Blair](mailto:blair42@gmail.com) with questions.
 
 This work (including all of the programs in this directory) is (c) David Blair,
 2015, and is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike
