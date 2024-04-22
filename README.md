@@ -7,8 +7,7 @@ This work (including all of the programs in this directory) is (c) David Blair,
 2015, and is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike
 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_US). 
 
-Version 3
-Last updated 2014-05-01
+Version 3. Last updated 2014-05-01
 
 ---
 
