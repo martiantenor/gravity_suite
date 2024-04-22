@@ -1,6 +1,6 @@
 # README FILE FOR GRAVITY MODELING PROGRAM SUITE
 
-##Contact information
+## Contact information
 Please contact [Dave Blair](mailto:dblair@purdue.edu) with questions.
 
 This work (including all of the programs in this directory) is (c) David Blair,
@@ -11,7 +11,7 @@ Last updated 2014-05-01
 
 ---
 
-##Introduction
+## Introduction
 
 Welcome! This is a suite of programs used to calculate the gravity anomaly over
 axisymmetric computer models of geologic features. This process involves roughly
@@ -51,7 +51,7 @@ can make it more useful.
 
 ---
 
-##Obtaining Parseable Information from the Model
+## Obtaining Parseable Information from the Model
 
 Currently, it possible to get the required data either from _Abaqus_ finite
 element models or _iSALE_ hydrocode models. There are dinstinct programs for
@@ -103,7 +103,7 @@ Either of these methods will create one or more plaintext ".grav" files which we
 can use in the next step.
 
 
-##Grabbing Parseable Information about the Geoid
+## Grabbing Parseable Information about the Geoid
 
 To calculate a free-air or Bouguer anomaly, we need a geoid against which to
 compare our model data. The procedure for doing this is much the same as for
@@ -137,7 +137,7 @@ grabbing non-geoid model data.
       file. In the above example, it'd be called "bar-from-time-zero.grav".
 
 
-##Doing the Gravity Calculation
+## Doing the Gravity Calculation
 
 Now you can move on to the actual gravity calculation. This uses the program
 `grav_anomaly.py`. Let's start with a quick introduction to that program. To get
@@ -276,7 +276,7 @@ calculation"). The assumptions used in the Bouguer correction are stored in the
 in the **OPTIONS** section of `grav_anomaly.py`.
 
 
-###Curved models
+### Curved models
 
 Doing calculations with axisymmetric models of a body with a curved surface is
 largely the same as the process described above. There are only a few new
@@ -294,7 +294,7 @@ and flags (including the spacecraft elevation) should work identically to their
 flat-world counterparts.
 
 
-##Plotting the Data
+## Plotting the Data
 
 Now that you have this data, you may want to plot it. The XY files generated
 above are plaintext, two-column files, and at their _most_ complicated they
@@ -335,7 +335,7 @@ gravity calculation.
 
 ---
 
-##Epilogue
+## Epilogue
 
 Hopefully that explanation makes it pretty clear what the various pieces of code
 in this package are capable of and how to use them. I welcome input as to how to
