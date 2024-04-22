@@ -1,0 +1,109 @@
+#grav_from_Abaqus - changelog and to-do list
+
+##Todo
+- figure out how to skip un-instanced elements
+
+##Changelog
+- **20150511** (v.3)
+    - updated copyright info
+- **20140501** (v.3)
+    - removed "debug" code for release, updated copyright info
+- **20131212** (v.2.2.1)
+    - bugfixes to get it working again, at least for 2D code. 3D mode is
+      probably still nonfunctional/buggy, but I haven't tested it.
+- **20130628**
+    - started implementing "3Daxi" mode, where it interprets a 3D model as if it
+      were axisymmetric; it does this by checking to make sure that an element
+      has 3 nodes on (or very, very near) the Z=0 plane, and expunging it from
+      the records if it doesn't. It also has to re-calculate element volume when
+      it does this.
+- **20130602** (v2.2)
+    - changed 'import' block such that trying to run from the command line
+      raises an error telling you to run it via Abaqus CAE instead, and then
+      prints the version number.
+    - changed to  Creative Commons Attribution-NonCommercial-ShareAlike 3.0
+      Unported License (from Attribution-ShareAlike)
+- **20130219**
+    - changed so that node lookup in element connectivity matrix is now done by
+      Node ID instead of the node's index in a set; this is more robust, and was
+      a response to errors related to models where a node (e.g. Node 1) is
+      defined in the .inp file but not connected to any elements, and thus isn't
+      present in the .odb file
+- **20130111** (v2.0)
+    - changed name from `grav_plugin.py` to `grav_from_Abaqus.py` to match the
+      `grav_from_iSALE.py` tool I just developed
+- **20130106**
+    - Added a few try/except loops to skip elements that don't have correct
+      data assigned to them. I need to figure out a more robust way of doing
+      this, because right now it's just skipping anything that raises a
+      KeyError!
+    - Added a verbose mode, and the option to name a step other than the first
+      one (to enable recovering data from both parts of a two-step mare run)
+- **20130104**
+    - Added the option to set some frame other than the last frame as the one
+      that gets output as "last"
+- **20120929**
+    - Added an "output undeformed" option that writes out data from the last
+      step attached to geometry fromt the first step, giving the files a
+      slightly different name so that you won't get confused as easily
+- **20120927** *major revisions*
+    - Changed the code so that, while it still temporarily stores values in
+      dictionaries keyed by element ID, it stores data longer-term (i.e.
+      function-to-function transfers) as sets full of Element-class objects.
+      This should allow the code to be more easily extensible in the future,
+      because now things are named much less ambiguously. For example, to
+      implement grabbing temperature, you'd only need to add a temperature
+      field to the Element class, write a small function to grab that data
+      from the open .odb file in CAE, and make another small `outputter`
+      function to write the data out; this is because the variables are now
+      independent of one another, instead of being items in a list where order
+      was important.
+    - Implemented grabbing and outputting pressures from an open .odb file
+      (the reason for the changes above)
+    - lots of general code cleanup
+    - moved the changelog into this file
+- **20120925**
+    - Fixed first/last frame and density flag behavior
+- **20120924**
+    - Made it so that this code now writes out four little text files,
+      assuming that "density_output" is set to True up in the Options, where
+      the 3rd and 4th files are just x, y, density for the first and last
+      frames. Also changed code so that first-frame output is toggled with a
+      True/False switch in Options. Because of this, the versions for first,
+      last, and both frames are now merged.
+- **20120906**
+    - Created this file, which outputs from both the first and last frame of
+      the .odb currently being viewed
+- **20120805**
+    - Created a separate "first frame" version to output results from the 1st
+      frame of the model instead of the last, and incorporated the minor code
+      restructuring into this program
+- **20120726**
+    - Changed code so that it now outputs nodal information along with all the
+      rest that it had already been doing. To do this, I went back to using an
+      Element class, for easier storage of data
+- **20120622**
+    - Now only outputs the last frame (this is a stepping stone to outputting
+      the frame visible in CAE). Also allowed the code to grab either single-
+      or double-precision data.
+- **20120306**
+    - Changed default output suffix to .grav so as not to conflict with
+      Abaqus' own .dat files.
+- **20120302**
+    - Script now outputs both initial and final data Re-organized (read:
+      improved) program structure
+- **20120229**
+    - Finished script to point where it'll output data and pass it to another
+      program (grav_anomaly.py) to do the actual calculation
+
+##To Do
+- Implement command-line mode
+- Figure out how to import libraries into Abaqus python so this can be done,
+  start-to-finish, as a plugin script (including the gravity calculation)
+
+##Developer's notes
+- attempting to import libraries, unsuccessfully so far:
+
+        working_directory = '/project/taylor/a/dave/mascons/'
+        sys.path.append(working_directory)
+        from special_functions import comelp as elliptic

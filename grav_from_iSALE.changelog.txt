@@ -1,0 +1,28 @@
+#GRAV_FROM_ISALE.PY CHANGELOG AND TODO
+
+##Known Issues
+- Plotter runs using NumPy, which isn't the most portable of solutions; I should
+  probably make a substitute GMT plotter
+- Currently can't handle input with a high-res zone that isn't on the left
+  edge (axisymmetric axis) of the model
+
+##Changelog
+- **20150511** (v.3)
+    - updated copyright info
+- **20140501** (v.3)
+    - removed "debug" code for release, updated copyright info
+- **20130602** (v2.2)
+    - cleaned up argument parsing (made it match with `grav_anomaly.py`)
+    - fixed issues relating to the way the program matched up data-file values
+      with the positions of cells during parsing; code wasn't working when tested
+      this morning, now appears to be functional
+- **20130111** (v2.0)
+    - sweeping changes; moved things around so that this program (formerly
+      called "nodes_from_iSALE.py") now processes _both_ the iSALE input and
+      data files, and generates a ".grav" file just like the _Abaqus_ output
+- **20130110**
+    - bumped version number to 0.2
+    - Re-did command-line implementation using `argparse`
+    - Created this changelog file
+- **20120820**
+    - Created program (date may be slightly off)

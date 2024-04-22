@@ -1,0 +1,201 @@
+#grav_anomaly - changelog and todo
+
+##Known Issues
+- Plotter runs using NumPy, which isn't the most portable of solutions; I should
+  probably make a substitute GMT plotter
+- 3D mode is very limited, and doesn't exactly reflect a 3D model because it's
+  making the assumption of perfect axisymmetry. Eventually, for doing full 3D
+  (non-symmetric) models, this program will need a separate calculation mode
+
+##Changelog
+- **20150311** (v3)
+    - updated copyright info
+- **20140501** (v3)
+    - removed "debug" code for v3 "release"
+- **20140204** (v3)
+    - Radial gravity is now fully operational; this is significant enough that I
+      thought it warranted a new full version number. I was doing the
+      calculation incorrectly before; you have to transform the towards-axis and
+      along-axis components into a rotated Cartesian frame (x'-y') and then take
+      the sum of the y' components, instead of just taking the root of the sum
+      of the squares of the towards- and along-axis components. This new math is
+      verified with test cases (`curvature_{C11,C12,C13,F10}`) as producing the
+      same results as a flat case when the radius of curvature is large enough.
+- **20140103** (v2.3.2)
+    - implemented Bouguer-mode calculations for curved models, switched
+      automatically based on which mode you're in
+- **20131219** (v2.3.1)
+    - caught a bug: I was setting the whole "anomaly_here" to 0 at R = 0,
+      instead of just the towards-axis component! That's fixed now.
+- **20131212** (v2.3.0)
+    - final bugfixes, and it now appears that radial gravity is working
+- **20131206** (towards v2.3)
+    - changed code to use Abramowitz & Stegun (1972) version of the elliptic
+      integral defintion, and changed comments to reflect that and avoid
+      confusion
+    - wrote code to evaluate the "anomaly_here" for a spacecraft on a curved
+      path; since all we care about is the magnitude, this is simply the square
+      root of vertical gravity squared plus radial gravity squared
+    - wrote code to get "km from pole" on the x axis instead of Theta-in-radians
+- **20131120** (towards v2.3)
+    - started implementing curved spacecraft paths; command-line option for
+      doing it, specifying a planetary radius and theta region-of-interest, and
+      changing the iteration code to move over a curved path instead of a flat
+      one
+- **20130912** (v2.2.2)
+    - removed all references to Pylab, replacing them in functions with `plt.*`
+      and in the import statement with `import matplotlib.pyplot as plt`
+- **20130602** (v2.2.1)
+    - very minor cleanup (cleaned up & commented-out statements about reading in
+      volume information for elements, which had already been supplanted by a
+      method in the Element class)
+- **20130602** (v2.2)
+    - minor cleanup of argument-parsing section (making it match
+      `grav_from_iSALE.py`)
+    - changed to  Creative Commons Attribution-NonCommercial-ShareAlike 3.0
+      Unported License (from Attribution-ShareAlike)
+- **20130409** (v 2.1.1)
+    - changed file naming so that Bouguer and free-air anomaly calculations wind
+      up with different file names
+    - made crustal density a variable in the ###OPTIONS### section
+- **20130408** (v2.1)
+    - implemented a Bouguer gravity mode (and related command-line options and
+      error checking) where any element with positive density that's at
+      elevation > 0 has its density set to 0, and any element with 0 density at
+      an elevation < 0 has its density set to 2550, effectively smoothing out
+      the surface and discounting topography
+    - bumped version number to 2.1 for the addition of Bouguer gravity
+- **20130225**
+    - bumped version number to 2.0.1; minor fix in naming convention of
+      `special_functions.py`
+- **20130111**
+    - bumped version number to 2.0
+    - revamped GMT file headers so they're actually useful
+    - added "-p/--plot" switches so you can choose to plot instead if the
+      program's set to default to GMT mode
+    - completely revamped and updated command-line argument parser: now uses
+      "argparse" instead of my homebrewed solution
+    - removed all of the iSALE parts of the code; now, those are all performed
+      in `grav_from_iSALE.py`, which creates a ".grav" file just like _Abaqus_
+      output does
+- **20130110**
+    - cleaned up the documentation of the elliptic integral functions to account
+      for the fact that they're now SciPy-based by default
+- **20120925**
+    - created a workaround to f2py being temporarily unavailable on the lab
+      machines; made a new library file called "special_functions_py.py" that
+      replicates the Fortran code in pure Python, and changed grav_anomaly.py to
+      link to that instead. This will be slower than using the Fortran version,
+      but it doesn't appear to be _that_ much slower. On all the tests I've done
+      the two also give identical numerical results.
+- **20120924**
+    - removed Taylor expansion mode code (it's in the 20120831 version)
+- **20120831**
+    - Cleaned up command-line keyword processing for various input files
+      ("geoid" file, GMT basename) and implemented it for the baseline
+      *.isalenodes file
+- **20120829**
+    - Added Creative Commons Attribution-ShareAlike 3.0 license (to this and all
+      other currently maintained code)
+- **20120824**
+    - Minor tweak so that the code will strip either ".grav" or ".sale" from the
+      filename when creating GMT output files
+- **20120822**
+    - (finished `nodes_from_iSALE.py`)
+    - Implemented iSALE gravity plotting!
+    - Cleaned up some aspects of elements; no longer grabbing volume from
+      Abaqus, instead relying on my methods to calculate it. Slight changes to
+      how it treats the centroid of an element, leaving it as a centroid instead
+      of explicitly defining an Element.x_coord and Element.y_coord.
+- **20120820**
+    - Cleaned up code by moving processing of different filetypes from the
+      command-line implementation (where I had to have everything typed twice)
+      into its own function, `get_data_from_file(this_file, total_iterations,
+      this_iteration)`
+    - Created a new "assistant" program, `nodes_from_iSALE.py`, to generate
+      nodal coordinates from an iSALE input file
+    - Started work on the iSALE file processor, though most of this work was in
+      the program `nodes_from_iSALE.py`
+- **20120817**
+    - Worked on creating a parser for iSALE output files (based on the x, y,
+      density, temperature data given to me by Brandon in the files
+      `DenTmpXXXXX.txt`)
+- **20120805**
+    - Implemented subdivision for baseline file, which I'd forgotten to do
+      before
+    - Added more commentary to the code
+- **20120801**
+    - Implemented the element-subdivision code and got it working (tested with
+      ###DEBUG block under the subdivide_element() function definition)
+    - Implemented subdividing a whole group of elements
+    - Code now works, and given enough subdivisions it can very closely match
+      the analytic results!
+    - General cleanup of code (changing a bunch of "for element in
+      these_elements" to "for this_element in these_elements", adding comments,
+      etc.)
+- **20120725**
+    - Big changes. Started implementing the Taylor-expansion-based solver, for
+      now as a separate mode (-T) for easier back-and-forth on the command line.
+      As of the end of 25 July, this was still giving incorrect results, much
+      further from the correct value than the simpler method we were using
+      before.
+    - Would it be better to just subdivide elements in code, which gains us the
+      benefits of higher-res models without the added clock time in Abaqus?
+- **20120618**
+    - General cleanup. Moved changelog to this file, separate from the main
+      code. Made usage/options text and examples into separate command-line
+      options. Made sure each function was labeled and had a __doc__ string.
+      That sort of thing.
+- **20120614**
+    - More big changes. Restructured the code at the end of the program to skip
+      the element_sets step, so that now the program can detect a plain *.xy
+      file and use that instead, to skip the gravity calculation in order to
+      speed up the execution or to compare against files generated elsewhere
+      (e.g. Mathematica).  There are some caveats with doing this; see
+      xyfile_parser() for details
+- **20120611**
+    - Massive changes. Restructured code to allow processing of more than one
+      file at a time, even in baseline-comparison mode. This program now assumes
+      that it's being fed .grav files that only have a single step reported in
+      them (and grav_plugin.py was changed to match this expected behavior).
+- **20120605**
+    - Changed verbose output during processing so that is shows the number of
+      the lateral step instead of the x position (previous code commented out)
+- **20120413**
+    - Revamped code so that now it's either in "anomaly" mode (compare against a
+      baseline file) or "acceleration" mode (don't compare against anything),
+      controlled by "anomaly_mode"=(True,False).  Removed the option to compare
+      against the first frame in the model, for simplicity, and because we
+      weren't using it at all.
+- **20120315**
+    - Made some changes to allow the user to modify whether they're looking at
+      just the final step, just the delta, or all three.  Also finally fixed the
+      verbosity keywords, and cleaned up command-line implementation a little
+      bit.
+- **20120307**
+    - Implemented comparing against a "baseline" file. Also changed it so that
+      the output files have the same base name as the .grav file, and made some
+      changes to verbose/quiet/silent modes.
+- **20120306**
+    - Improved usage text
+- **20120302**
+    - Implemented GMT mode, and changed to plotting initial, final, and delta
+      (final - initial). Various other improvements.
+- **20120301**
+    - Completely re-did data entry to use the new "grav_plugin.py" output which
+      comes direct from an Abaqus .odb file that the user has opened in CAE, and
+      wound up re-writing most of this from scratch - and now it works! =)
+- **20120220**
+    - Made some minor edits and comments - attempted debugging
+- **20111130**
+    - Changed element_set-flipping code (in inpparser) so that it ignores sets
+      with no material associated, instead of just ignoring the ones starting
+      with an underscore. Should be more robust.  Also, added "verbose",
+      "quiet", and "num_steps" options and command-line flags, and re-wrote the
+      command-line option parser to allow > 1 option to be used at a time.
+- **20111123**
+    - Huge changes. Wrote rptparser(), inpparser(), and datacombiner(), linked
+      them together, and fleshed out the command-line instructions section.
+      Tested & shown to match Jay's results for a ring.
+- **20111121**
+    - Re-formatted to match abqplot.py. Resumed active use & development.
